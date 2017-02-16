@@ -9,7 +9,7 @@ let movieQuery = {
     return sequelize.query(insertQuery, { replacements: { moviename: moviename_, releasedate: releasedate_, studio: studio_ } })
   },
   insertActor: function (actorname_) {
-    let insertQuery = `INSERT INTO actor (actorname_) VALUES (:actorname) returning actorid`
+    let insertQuery = `INSERT INTO actor (actorname) VALUES (:actorname) returning actorid`
     return sequelize.query(insertQuery, { replacements: { actorname: actorname_ } })
   },
   insertGetMovie: function (actorID_, moviename_) {
