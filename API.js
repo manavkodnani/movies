@@ -4,6 +4,9 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 
+let actors = {}
+let movies = {}
+
 const getMovies1 = () => axios.get('https://movie-api-lyalzcwvbg.now.sh/paramount')
 
 const getMovies2 = () => axios.get('https://movie-api-lyalzcwvbg.now.sh/dreamworks')
@@ -67,7 +70,20 @@ app.get('/fetch', function (req, res) {
 app.get('/movie/:movieName', function (req, res) {
   const movieName = req.params.movieName
   movieQuery.readActor(movieName)
-  .then(function )
+  .then(function (response) {
+    actors = response[0]
+    movieQuery.readMovie(movieName)
+    .then(function (response) {
+      movies = response[0]
+      console.log(movies)
+      console.log(actors)
+    })
+  })
+  // .then(function (response) {
+  //   let result = {}
+  //   console.log(movies)
+  //   console.log(actors)
+  // })
 })
 
 app.listen(3000, function () {

@@ -21,7 +21,7 @@ let movieQuery = {
     return sequelize.query(readQuery, { replacements: { moviename: moviename_ } })
   },
   readMovie: function (moviename_) {
-    let readQuery = `SELECT moviename, releasedate, studio from movies where where moviename = (:moviename)`
+    let readQuery = `SELECT moviename, releasedate, studio from movies where moviename = (:moviename)`
     return sequelize.query(readQuery, { replacements: { moviename: moviename_ } })
   }
 }
