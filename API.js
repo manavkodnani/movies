@@ -75,15 +75,18 @@ app.get('/movie/:movieName', function (req, res) {
     movieQuery.readMovie(movieName)
     .then(function (response) {
       movies = response[0]
-      console.log(movies)
-      console.log(actors)
+      let resultActors = []
+      let result = {}
+      result.movieName = movies[0].moviename
+      result.releaseDate = movies[0].releaseDate
+      actors.forEach(function (actor) {
+        resultActors.push(actor.actorname)
+      })
+      result.actors = resultActors
+      result.studio = movies[0].studio
+      res.send(result)
     })
   })
-  // .then(function (response) {
-  //   let result = {}
-  //   console.log(movies)
-  //   console.log(actors)
-  // })
 })
 
 app.listen(3000, function () {
