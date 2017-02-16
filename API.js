@@ -14,23 +14,20 @@ const getMovies2 = () => axios.get('https://movie-api-lyalzcwvbg.now.sh/dreamwor
 const getMovies3 = () => axios.get('https://movie-api-lyalzcwvbg.now.sh/actors')
 
 app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(bodyParser.json())
-// app.use(express.static('public'))
 
-// app.set('view engine', 'ejs')
-//./node_modules/.bin/eslint fileReadWrite.js --fix
-app.get('/', function (req, res) {
-  res.send('hello')
-})
 app.get('/fetch', function (req, res) {
   getMovies1().then(function (response) {
     console.log('Movies1')
     return (response.data)
   })
     .then(function (result) {
+      const promiseAllQueries = []
       result.forEach(function (movie) {
-        movieQuery.insertMovie(movie.movieName, movie.releaseDate, 'paramount')
+        promiseAllQueries.push(movieQuery.insertMovie(movie.movieName, movie.releaseDate, 'paramount'))
       })
+      return Promise.all(promiseAllQueries)
+    })
+    .then(function (response) {
       return getMovies2()
     })
     .then(function (response) {
@@ -38,10 +35,14 @@ app.get('/fetch', function (req, res) {
       return (response.data)
     })
     .then(function (response) {
+      const promiseAllQueries = []
       response.forEach(function (movie) {
-        movieQuery.insertMovie(movie.movieName, movie.releaseDate, 'dreamworks')
+        promiseAllQueries.push(movieQuery.insertMovie(movie.movieName, movie.releaseDate, 'dreamworks'))
         console.log('Movies details inserted into db')
       })
+      return Promise.all(promiseAllQueries)
+    })
+    .then(function (response) {
       return getMovies3()
     })
     .then(function (response) {
@@ -53,12 +54,17 @@ app.get('/fetch', function (req, res) {
             return (response[0].actorid)
           })
           .then(function (actorid) {
+            const promiseAllQueries = []
             actor.movies.forEach(function (movie) {
-              movieQuery.insertGetMovie(actorid, movie)
+              promiseAllQueries.push(movieQuery.insertGetMovie(actorid, movie))
             })
+            return Promise.all(promiseAllQueries)
           })
-        console.log('Inserted actor')
+          .then(function (response) {
+            console.log('Inserted actor')
+          })
       })
+      res.send('fetched from url to db')
     })
     .catch(function (error) {
       console.log(error)
@@ -70,23 +76,23 @@ app.get('/fetch', function (req, res) {
 app.get('/movie/:movieName', function (req, res) {
   const movieName = req.params.movieName
   movieQuery.readActor(movieName)
-  .then(function (response) {
-    actors = response[0]
-    movieQuery.readMovie(movieName)
     .then(function (response) {
-      movies = response[0]
-      let resultActors = []
-      let result = {}
-      result.movieName = movies[0].moviename
-      result.releaseDate = movies[0].releaseDate
-      actors.forEach(function (actor) {
-        resultActors.push(actor.actorname)
-      })
-      result.actors = resultActors
-      result.studio = movies[0].studio
-      res.send(result)
+      actors = response[0]
+      movieQuery.readMovie(movieName)
+        .then(function (response) {
+          movies = response[0]
+          let resultActors = []
+          let result = {}
+          result.movieName = movies[0].moviename
+          result.releaseDate = movies[0].releaseDate
+          actors.forEach(function (actor) {
+            resultActors.push(actor.actorname)
+          })
+          result.actors = resultActors
+          result.studio = movies[0].studio
+          res.send(result)
+        })
     })
-  })
 })
 
 app.listen(3000, function () {
