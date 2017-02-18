@@ -25,6 +25,7 @@ const result = {
 
 describe('When get request is sent to movies API', function () {
   it('should display movies json', function (done) {
+    this.timeout(90000)
     request(options, function (error, response, body) {
       if (error) throw new Error(error)
       assert.equal(body, result)

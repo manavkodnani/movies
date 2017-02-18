@@ -16,6 +16,7 @@ const options = {
 
 describe('When get request is sent to fetch API', function () {
   it('should display successful fetched message', function (done) {
+    this.timeout(90000)
     request(options, function (error, response, body) {
       if (error) throw new Error(error)
       assert.equal(body, 'fetched from url to db')
