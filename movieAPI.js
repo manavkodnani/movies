@@ -61,7 +61,6 @@ app.get('/movie/:movieName', function (req, res) {
       movieQuery.readMovie(movieName)
         .then(function (response) {
           movies = response[0]
-          console.log(movies)
           let resultActors = []
           let result = {}
           result.movieName = movies[0].moviename

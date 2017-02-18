@@ -15,6 +15,7 @@ const options = {
 
 const result = {
   "movieName": "Movie 2",
+  "releaseDate": "Oct-01-2016",
   "actors": [
     "Actor 1",
     "Actor 2",
@@ -25,7 +26,6 @@ const result = {
 
 describe('When get request is sent to movies API', function () {
   it('should display movies json', function (done) {
-    this.timeout(90000)
     request(options, function (error, response, body) {
       if (error) throw new Error(error)
       assert.equal(body, result)

@@ -5,9 +5,8 @@ var expect = chai.expect
 var should = chai.should()
 
 describe('when insert movie query is executed', function () {
-  it("should return succes message if query is successfully executed", function (done) {
-    this.timeout(10000)
-    movieQuery.insertMovie('ice age', 'jan-06-2015', 'dreamworks')
+  it('should return succes message if query is successfully executed', function (done) {
+    movieQuery.insertMovie('inferno', 'jan-06-2015', 'dreamworks')
       .then(function (response) {
         console.log(response)
         expect(response).to.eqls([])
@@ -15,20 +14,37 @@ describe('when insert movie query is executed', function () {
       })
       .catch((err) => {
         console.log(err)
+        done(err)
       })
   })
 })
 
-// describe('when insert actor query is executed', function () {
-//   it("should return succes message if correct ID is passed", function (done) {
-//     movieQuery.insertMovie('abcjsckjan', 'jan-06-2015', 'dreamworks')
+describe('when insert actor query is executed', function () {
+  it('should return succes message if query is successfully executed', function (done) {
+    movieQuery.insertActor('Tom Hanks')
+      .then(function (response) {
+        console.log(response)
+        expect(response[0].actorid).to.eqls(151)
+        done()
+      })
+      .catch((err) => {
+        console.log(err)
+        done(err)
+      })
+  })
+})
+
+// describe('when insert get movie query is executed', function () {
+//   it('should return succes message if query is successfully executed', function (done) {
+//     movieQuery.insertGetMovie('Tom Hanks')
 //       .then(function (response) {
 //         console.log(response)
-//         expect(response[1].rowCount).to.eqls(1)
+//         expect(response[0].actorid).to.eqls(150)
 //         done()
 //       })
 //       .catch((err) => {
 //         console.log(err)
+//         done(err)
 //       })
 //   })
 // })
